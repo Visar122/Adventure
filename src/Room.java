@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Room {
      private String Name;
      private String Description;
@@ -5,6 +7,7 @@ public class Room {
     private Room east;
     private Room south;
     private Room west;
+    private ArrayList<Item> items=new ArrayList<>();
 
 
 
@@ -39,12 +42,18 @@ public class Room {
 
 
 
+    public void addItem(Item item){items.add(item);}
 
+    public void removeItem(Item item){items.remove(item);}
 
+    public ArrayList<Item> getItems(){return items;}
 
-
-
-
-
-
+    public Item findItem(String shortName){
+        for (Item item : items) {
+            if (item.getShortName().equalsIgnoreCase(shortName)) {
+                return item;
+            }
+        }
+        return null;
+    }
 }

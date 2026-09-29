@@ -38,6 +38,14 @@ public class Map {
         Room8.setEast(Room9);
         Room8.setWest(Room9);
 
+        Room1.addItem(new Item("lamp", "a shiny brass lamp"));
+        Room2.addItem(new Item("coins", "some gold coins"));
+        Room3.addItem(new Item("lightbulb", "a flickering lightbulb"));
+        Room4.addItem(new Item("chair", "a wooden chair"));
+        Room6.addItem(new Item("speaker", "a small speaker"));
+        Room7.addItem(new Item("flashlight", "a bright flashlight"));
+        Room8.addItem(new Item("key", "a rusty key"));
+
         startRoom=Room1;
     }
 

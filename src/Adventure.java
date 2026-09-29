@@ -12,13 +12,30 @@ public class Adventure {
 
             String input=ui.getInput();
 
-            switch (input){
 
-                case "go east", "east", "e" -> move(player.getCurrentRoom().getEast());
-                case "go west","west","w"->move(player.getCurrentRoom().getWest());
-                case "go south","south","s"->move(player.getCurrentRoom().getSouth());
-                case "go north","north","n"->move(player.getCurrentRoom().getNorth());
+            String[] parts=input.split(" ", 2);  //deler den til 2 så   fx take lamp parts[0] = "take" parts[1] = "lamp"
+            String command=parts[0]; // tager command så den tager  hvad den skal gør fx tage kun  command = "take" eller "drop",  handling (what to do).
+            String argument=parts.length > 1 ? parts[1].trim() : "";  //hvis  parts den er større end 1 så er  argument == fx lamp eller så er det "" string fx brugeren ønsker look
+
+            switch (command){
+
+                case "go" -> {
+                    switch (argument){
+                        case "east" -> move(player.getCurrentRoom().getEast());
+                        case "west" -> move(player.getCurrentRoom().getWest());
+                        case "south" -> move(player.getCurrentRoom().getSouth());
+                        case "north" -> move(player.getCurrentRoom().getNorth());
+                        default -> ui.wrongCommand();
+                    }
+                }
+                case "east", "e" -> move(player.getCurrentRoom().getEast());
+                case "west","w"->move(player.getCurrentRoom().getWest());
+                case "south","s"->move(player.getCurrentRoom().getSouth());
+                case "north","n"->move(player.getCurrentRoom().getNorth());
                 case "look","l"->look();
+                case "inventory","inv","invent"->ui.showInventory(player.getInventory());
+                case "take","t"->take(argument);
+                case "drop","d"->drop(argument);
                 case "exit","x"->run=false;
                 default -> {
                     ui.wrongCommand();
@@ -39,5 +56,23 @@ public class Adventure {
 
     private void look(){
         ui.look(player.getCurrentRoom());
+    }
+
+    private void take(String shortName){
+        Item item=player.takeItem(shortName);
+        if (item == null) {
+            ui.nothingToTake(shortName);
+        } else {
+            ui.taken(item);
+        }
+    }
+
+    private void drop(String shortName){
+        Item item=player.dropItem(shortName);
+        if (item == null) {
+            ui.notInInventory(shortName);
+        } else {
+            ui.dropped(item);
+        }
     }
 }
