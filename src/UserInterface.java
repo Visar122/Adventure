@@ -22,6 +22,7 @@ public class UserInterface {
         if (!currentRoom.getItems().isEmpty()) {
             System.out.println("Here you see: " +itemList(currentRoom.getItems()));
         }
+
     }
 
     public void showInventory(ArrayList<Item> inventory){
@@ -69,6 +70,23 @@ public class UserInterface {
 
     public void goodbye(){
         System.out.println("Goodbye!");
+    }
+
+
+    public void Showhealth(int health){
+        System.out.println("Your Health: " +health );
+        if (health >=100) System.out.println("You have full health");
+        else if (health >= 50) System.out.println("you are in good health, but avoid fighting right now");
+        else if (health >= 25) System.out.println("you are wounded - find something healthy to eat");
+        else if (health >= 1) System.out.println("you are barely alive");
+        else System.out.println("you should be dead");
+    }
+    public void eatResult(EatOutcome eatOutcome){
+        switch (eatOutcome.getResult()){
+            case NOT_FOUND -> System.out.println("There is nothing like" + eatOutcome.getLongName()+"to eat around here");
+            case NOT_FOOD -> System.out.println("You cannot eat"+eatOutcome.getLongName());
+            case EATEN -> System.out.println("You ate " + eatOutcome.getLongName()+ "(health: + " + eatOutcome.GetHealthchange()+ ")");
+        }
     }
 }
  

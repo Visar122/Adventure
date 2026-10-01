@@ -36,6 +36,8 @@ public class Adventure {
                 case "inventory","inv","invent"->ui.showInventory(player.getInventory());
                 case "take","t"->take(argument);
                 case "drop","d"->drop(argument);
+                case "health","h"->ui.Showhealth(player.getHealth());
+                case "eat"->ui.eatResult(player.eat(argument));
                 case "exit","x"->run=false;
                 default -> {
                     ui.wrongCommand();

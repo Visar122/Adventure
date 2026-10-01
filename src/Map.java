@@ -37,6 +37,7 @@ public class Map {
 
         Room8.setEast(Room9);
         Room8.setWest(Room9);
+        startRoom=Room1;
 
         Room1.addItem(new Item("lamp", "a shiny brass lamp"));
         Room2.addItem(new Item("coins", "some gold coins"));
@@ -46,7 +47,12 @@ public class Map {
         Room7.addItem(new Item("flashlight", "a bright flashlight"));
         Room8.addItem(new Item("key", "a rusty key"));
 
-        startRoom=Room1;
+
+        Room1.addItem(new Food("apple", "a red apple", 20));
+        Room5.addItem(new Food("bread", "a loaf of bread", 15));
+        Room3.addItem(new Food("mushroom", "a suspicious mushroom", -30));
+
+
     }
 
     public Room getStartRoom(){
