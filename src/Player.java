@@ -73,7 +73,7 @@ public class Player {
             return new EatOutcome(EatResult.NOT_FOOD, item.getLongName(), 0);
         }
         if(inInventory){
-            inventory.remove(food);   // hvis den er i bage  fjerner det
+            inventory.remove(food);   // hvis food er i inventory så   fjerner den det
         }
         else {
             currentRoom.removeItem(food);
