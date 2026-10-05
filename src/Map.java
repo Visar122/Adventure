@@ -51,6 +51,8 @@ public class Map {
         Room1.addItem(new Food("apple", "a red apple", 20));
         Room5.addItem(new Food("bread", "a loaf of bread", 15));
         Room3.addItem(new Food("mushroom", "a suspicious mushroom", -30));
+        Room1.addItem(new MeleeWeapon("knife","a sharp knife",10));
+        Room2.addItem(new RangedWeapon("Pistol" ,"a silver pistol",30,5));
 
 
     }

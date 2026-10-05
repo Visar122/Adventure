@@ -33,11 +33,13 @@ public class Adventure {
                 case "south","s"->move(player.getCurrentRoom().getSouth());
                 case "north","n"->move(player.getCurrentRoom().getNorth());
                 case "look","l"->look();
-                case "inventory","inv","invent"->ui.showInventory(player.getInventory());
+                case "inventory","inv","invent"->ui.showInventory(player.getInventory(),player.getEqquipedWeapon());
                 case "take","t"->take(argument);
                 case "drop","d"->drop(argument);
                 case "health","h"->ui.Showhealth(player.getHealth());
                 case "eat"->ui.eatResult(player.eat(argument));
+                case "equip"->ui.equipResult(player.equip(argument),argument);
+                case "attack","a"->ui.attackResult(player.attack(),player.getEqquipedWeapon());
                 case "exit","x"->run=false;
                 default -> {
                     ui.wrongCommand();
@@ -77,4 +79,7 @@ public class Adventure {
             ui.dropped(item);
         }
     }
+
+
+
 }

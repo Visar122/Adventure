@@ -6,6 +6,8 @@ public class Player {
 
     public int health=100;
 
+    private  Weapon eqquipedWeapon;
+
     public Player(Room startRoom){
         currentRoom=startRoom;
     }
@@ -52,6 +54,9 @@ public class Player {
         if (item == null) {
             return null;
         }
+        if(item==eqquipedWeapon){
+            eqquipedWeapon=null;
+        }
         inventory.remove(item);
         currentRoom.addItem(item);
         return item;
@@ -60,9 +65,10 @@ public class Player {
     public int getHealth(){
         return  health;
     }
+
     public EatOutcome eat(String shortName){
         Item item=findItem(shortName);
-        boolean inInventory=item!=null; //so det betyder hvis den er ikke null så den findItem fandt noget
+        boolean inInventory=item!=null; //so det betyder hvis den er ikke null så  findItem fandt noget
         if (item==null){
             item=currentRoom.findItem(shortName);
         }
@@ -80,6 +86,36 @@ public class Player {
         }
         health+=food.getHealthpoints();
         return new EatOutcome(EatResult.EATEN,food.getLongName(),food.getHealthpoints());
+
+    }
+
+
+
+    public  Weapon getEqquipedWeapon(){
+        return eqquipedWeapon;
+    }
+    public  EquipResult equip(String shortname){
+        Item item=findItem(shortname);
+        if(item==null){
+           return EquipResult.NOT_FOUND;
+        }
+        if(!(item instanceof Weapon weapon)){
+            return  EquipResult.NOT_WEAPON;
+        }
+        eqquipedWeapon=weapon;
+        return  EquipResult.EQUIPPED;
+    }
+    public AttackResult attack(){
+
+        if (eqquipedWeapon==null){
+            return AttackResult.NO_WEAPON;
+        }
+        if(!eqquipedWeapon.canUse()){
+            return AttackResult.NO_AMMO;
+        }
+        eqquipedWeapon.use();
+        return AttackResult.ATTACKED;
+
 
     }
 }

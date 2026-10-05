@@ -7,7 +7,7 @@ public class UserInterface {
     public void welcome(){
         System.out.println("Welcome to the game !");
         System.out.println("To continoue type where you want to move : e = (east) | w = (west)  | s = (south) | n = (north)");
-        System.out.println("Other  look | take <item> | drop <item> | inventory | exit");
+        System.out.println("Other  look | take <item> | drop <item> | eat <item> | equip <weapon> | attack | inventory | exit");
         System.out.println("");
     }
 
@@ -25,11 +25,17 @@ public class UserInterface {
 
     }
 
-    public void showInventory(ArrayList<Item> inventory){
+    public void showInventory(ArrayList<Item> inventory,Weapon equippedWeapon){
         if (inventory.isEmpty()) {
             System.out.println("Your inventory is empty.");
         } else {
             System.out.println("You are carrying: " +itemList(inventory));
+        }
+        if (equippedWeapon==null){
+            System.out.println("You have no  weapon eqquiped ");
+        }
+        else {
+            System.out.println("Eqquiped: " + equippedWeapon.getLongName());
         }
     }
 
@@ -86,6 +92,20 @@ public class UserInterface {
             case NOT_FOUND -> System.out.println("There is nothing like" + eatOutcome.getLongName()+"to eat around here");
             case NOT_FOOD -> System.out.println("You cannot eat"+eatOutcome.getLongName());
             case EATEN -> System.out.println("You ate " + eatOutcome.getLongName()+ "(health: + " + eatOutcome.GetHealthchange()+ ")");
+        }
+    }
+    public void equipResult(EquipResult result,String shortName){
+        switch (result){
+            case NOT_FOUND -> System.out.println("You have nothing like   " + shortName + " in the inventory");
+            case NOT_WEAPON -> System.out.println(  shortName + " Is not a Weapon");
+            case EQUIPPED -> System.out.println("You have eqqupied a : " + shortName);
+        }
+    }
+    public void  attackResult(AttackResult attack,Weapon weapon){
+        switch (attack){
+            case NO_WEAPON -> System.out.println("You have no weapon to attack with");
+            case NO_AMMO -> System.out.println(weapon.getShortName() +"has "+ weapon.getUsesLeftText());
+            case ATTACKED -> System.out.println("You " +weapon.getAttackVerb()+ " your " +weapon.getLongName()+ " at the air " + weapon.getUsesLeftText());
         }
     }
 }
