@@ -7,7 +7,7 @@ public class UserInterface {
     public void welcome(){
         System.out.println("Welcome to the game !");
         System.out.println("To continoue type where you want to move : e = (east) | w = (west)  | s = (south) | n = (north)");
-        System.out.println("Other  look | take <item> | drop <item> | eat <item> | equip <weapon> | attack | inventory | exit");
+        System.out.println("Other  look | take <item> | drop <item> | eat <item> | equip <weapon> | attack <enemy> | health | inventory | exit");
         System.out.println("");
     }
 
@@ -16,11 +16,16 @@ public class UserInterface {
         return scanner.nextLine().toLowerCase().trim();
     }
 
-    public void look(Room currentRoom){
+    public void look(Room currentRoom,int health){
         System.out.println("You are currently in :" +currentRoom.GetName());
         System.out.println("You are currently in :" +currentRoom.GetDescription());
+        System.out.println("Your health: " +health +" %");
         if (!currentRoom.getItems().isEmpty()) {
             System.out.println("Here you see: " +itemList(currentRoom.getItems()));
+        }
+        for (Enemy enemy : currentRoom.getEnemies()) {
+            System.out.println("Beware! There  is a : " +enemy.getDescription());
+
         }
 
     }
@@ -87,11 +92,11 @@ public class UserInterface {
         else if (health >= 1) System.out.println("you are barely alive");
         else System.out.println("you should be dead");
     }
-    public void eatResult(EatOutcome eatOutcome){
+    public void eatResult(EatOutcome eatOutcome,int health){
         switch (eatOutcome.getResult()){
             case NOT_FOUND -> System.out.println("There is nothing like" + eatOutcome.getLongName()+"to eat around here");
             case NOT_FOOD -> System.out.println("You cannot eat"+eatOutcome.getLongName());
-            case EATEN -> System.out.println("You ate " + eatOutcome.getLongName()+ "(health: + " + eatOutcome.GetHealthchange()+ ")");
+            case EATEN -> System.out.println("You ate " + eatOutcome.getLongName()+ "(health: + " + eatOutcome.GetHealthchange()+ ") - health : " + health+"%");
         }
     }
     public void equipResult(EquipResult result,String shortName){
@@ -101,12 +106,41 @@ public class UserInterface {
             case EQUIPPED -> System.out.println("You have eqqupied a : " + shortName);
         }
     }
-    public void  attackResult(AttackResult attack,Weapon weapon){
-        switch (attack){
+    public void  attackResult(AttackOutcome outcome,Weapon weapon,int health){
+        Enemy enemy=outcome.getEnemy();
+        switch (outcome.getResult()){
             case NO_WEAPON -> System.out.println("You have no weapon to attack with");
-            case NO_AMMO -> System.out.println(weapon.getShortName() +"has "+ weapon.getUsesLeftText());
-            case ATTACKED -> System.out.println("You " +weapon.getAttackVerb()+ " your " +weapon.getLongName()+ " at the air " + weapon.getUsesLeftText());
+            case NO_AMMO -> System.out.println(weapon.getShortName() +" has "+ weapon.getUsesLeftText());
+            case ENEMY_NOT_FOUND -> System.out.println("There is no enemy like that here");
+            case ATTACKED_AIR -> System.out.println("You " +weapon.getAttackVerb()+ " your " +weapon.getLongName()+ " at the air " + weapon.getUsesLeftText());
+            case ENEMY_KILLED -> {
+                playerHits(enemy,weapon);
+                System.out.println(enemy.getLongName()+ " dies, dropping " +enemy.getWeapon().getLongName()+ ".");
+            }
+            case ENEMY_COUNTERATTACKED -> {
+                playerHits(enemy,weapon);
+                Weapon enemyWeapon=enemy.getWeapon();
+                System.out.println(enemy.getLongName()+ " " +enemyWeapon.getAttackVerb()+ "s " +enemyWeapon.getLongName()+
+                        " at you - " +enemyWeapon.getDamage()+ " damage.");
+                System.out.println("You are at: " + health + "% health");
+                System.out.println(enemy.getLongName() +"is still learking around");
+
+            }
+            case ENEMY_NO_AMMO -> {
+                playerHits(enemy,weapon);
+                System.out.println(enemy.getLongName()+ " tries to fight back, but " +enemy.getWeapon().getLongName()+ " is empty!");
+            }
         }
+    }
+
+    private void playerHits(Enemy enemy,Weapon weapon){
+        System.out.println("You hit " +enemy.getLongName()+ " with " +weapon.getLongName()+
+                " + " +weapon.getDamage()+ " damage. " +weapon.getUsesLeftText());
+        System.out.println("Enemies health : " +enemy.getHealth() + "%");
+    }
+
+    public void gameOver(){
+        System.out.println("Your health has reached 0. You have died - GAME OVER!");
     }
 }
  

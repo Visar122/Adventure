@@ -50,9 +50,22 @@ public class Map {
 
         Room1.addItem(new Food("apple", "a red apple", 20));
         Room5.addItem(new Food("bread", "a loaf of bread", 15));
-        Room3.addItem(new Food("mushroom", "a suspicious mushroom", -30));
+        Room3.addItem(new Food("mushroom", "a suspicious mushroom", -100));
         Room1.addItem(new MeleeWeapon("knife","a sharp knife",10));
         Room2.addItem(new RangedWeapon("Pistol" ,"a silver pistol",30,5));
+
+
+        Enemy goblin=new Enemy("goblin","a sneaky goblin","A small green goblin grins at you, holding a rusty dagger.",
+                20,new MeleeWeapon("dagger","a rusty dagger",8),Room1);
+        Room1.addEnemy(goblin);
+
+        Enemy archer=new Enemy("archer","a skeleton archer","A rattling skeleton aims a bow at you.",
+                40,new RangedWeapon("bow","an old bow",12,2),Room3);
+        Room3.addEnemy(archer);
+
+        Enemy troll=new Enemy("Monster","a big Monster","A huge, Monster guards the room, gripping a heavy wooden club.",
+                60,new MeleeWeapon("club","a heavy wooden club",30),Room6);
+        Room6.addEnemy(troll);
 
 
     }

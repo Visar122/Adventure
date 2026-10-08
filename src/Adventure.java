@@ -37,14 +37,20 @@ public class Adventure {
                 case "take","t"->take(argument);
                 case "drop","d"->drop(argument);
                 case "health","h"->ui.Showhealth(player.getHealth());
-                case "eat"->ui.eatResult(player.eat(argument));
+                case "eat"->ui.eatResult(player.eat(argument),player.getHealth());
                 case "equip"->ui.equipResult(player.equip(argument),argument);
-                case "attack","a"->ui.attackResult(player.attack(),player.getEqquipedWeapon());
+                case "attack","a"->ui.attackResult(player.attack(argument),player.getEqquipedWeapon(), player.getHealth());
                 case "exit","x"->run=false;
                 default -> {
                     ui.wrongCommand();
                     look();
                 }
+            }
+
+            // spillet slutter hvis spilleren dør (fra en fjende eller giftig mad)
+            if (player.isDead()){
+                ui.gameOver();
+                run=false;
             }
 
         }
@@ -59,7 +65,7 @@ public class Adventure {
     }
 
     private void look(){
-        ui.look(player.getCurrentRoom());
+        ui.look(player.getCurrentRoom(),player.getHealth());
     }
 
     private void take(String shortName){

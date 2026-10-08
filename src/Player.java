@@ -85,6 +85,9 @@ public class Player {
             currentRoom.removeItem(food);
         }
         health+=food.getHealthpoints();
+        if(health>100){
+            health=100;
+        }
         return new EatOutcome(EatResult.EATEN,food.getLongName(),food.getHealthpoints());
 
     }
@@ -105,17 +108,54 @@ public class Player {
         eqquipedWeapon=weapon;
         return  EquipResult.EQUIPPED;
     }
-    public AttackResult attack(){
+    public AttackOutcome attack(String enemyName){
 
         if (eqquipedWeapon==null){
-            return AttackResult.NO_WEAPON;
+            return new AttackOutcome(AttackResult.NO_WEAPON,null);
         }
+
+        // find fjenden - intet navn betyder den første fjende i rummet (eller ingen)
+        Enemy enemy=null;
+        if (enemyName.isEmpty()){
+            if (!currentRoom.getEnemies().isEmpty()){
+                enemy=currentRoom.getEnemies().get(0);
+            }
+        } else {
+            enemy=currentRoom.findEnemy(enemyName);
+            if (enemy==null){
+                return new AttackOutcome(AttackResult.ENEMY_NOT_FOUND,null); // forkert navn - ingen ammo brugt
+            }
+        }
+
         if(!eqquipedWeapon.canUse()){
-            return AttackResult.NO_AMMO;
+            return new AttackOutcome(AttackResult.NO_AMMO,enemy);
         }
         eqquipedWeapon.use();
-        return AttackResult.ATTACKED;
 
 
+
+        if (enemy==null){
+            return new AttackOutcome(AttackResult.ATTACKED_AIR,null);
+        }
+
+
+        enemy.hit(eqquipedWeapon.getDamage());
+        if (enemy.isDead()){
+            return new AttackOutcome(AttackResult.ENEMY_KILLED,enemy);
+        }
+
+        // fjenden overlevede  den slår igen
+        if (!enemy.attack(this)){
+            return new AttackOutcome(AttackResult.ENEMY_NO_AMMO,enemy);
+        }
+        return new AttackOutcome(AttackResult.ENEMY_COUNTERATTACKED,enemy);
+    }
+
+    public void takeDamage(int damage){
+        health-=damage;
+    }
+
+    public boolean isDead(){
+        return health<=0;
     }
 }
